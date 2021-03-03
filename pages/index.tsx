@@ -4,7 +4,6 @@ import Layout from '../components/Layout'
 import { Chat, LayoutPage } from '../next-env'
 import ChatInput from '../components/ChatInput';
 import useSocket from '../hooks/useSocket';
-import Login from '../components/Login';
 import { UserStore } from '../store/UserStore';
 import { ChatStore } from '../store/ChatStore';
 import { OnlineListStore } from '../store/OnlineListStore';
