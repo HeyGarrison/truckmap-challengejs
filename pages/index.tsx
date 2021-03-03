@@ -1,59 +1,58 @@
 import React, { useEffect, useState } from 'react'
 import ChatList from '../components/ChatList'
 import Layout from '../components/Layout'
-import { LayoutPage } from '../next-env'
-import { io, Socket } from "socket.io-client";
-import { PullstateCore } from '../stores/PullstateCore';
+import { Chat, LayoutPage } from '../next-env'
 import ChatInput from '../components/ChatInput';
-
+import useSocket from '../hooks/useSocket';
+import Login from '../components/Login';
+import { UserStore } from '../store/UserStore';
+import { ChatStore } from '../store/ChatStore';
+import { OnlineListStore } from '../store/OnlineListStore';
 
 
 const Home: LayoutPage = () => {
-  const [chatData, setChatData] = useState([]);
-  const [socket, setSocket] = useState<Socket>();
+
+  const socket = useSocket();
+  const userEmail = UserStore.useState(s => s.email);
 
   useEffect(() => {
-    fetch("/api/socketio").finally(() => {
-      // setSocket(io());
-      // const socket = io()
-      setSocket(io());
+    if (socket && userEmail) {
+      socket.emit('online-user', userEmail)
 
-    });
-  }, []);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('connect', () => {
-        console.log('connect')
+      socket.on('chat', (data: Chat) => {
+        ChatStore.update(s => {
+          s.chatList = s.chatList ? [data, ...s.chatList] : [data]
+        });
       })
 
-      socket.on('chat', data => {
-        setChatData(prev => [data, ...prev])
+      socket.on('online-user', (onlineUsers) => {
+        console.log(onlineUsers);
+        OnlineListStore.update(s => {
+          s.data = onlineUsers
+        });
       })
 
-      socket.on('a user connected', () => {
-        console.log('a user connected')
-      })
-
-      socket.on('disconnect', () => {
-        console.log('disconnect')
+      socket.on('offline-user', (onlineUsers) => {
+        console.log(onlineUsers)
+        OnlineListStore.update(s => {
+          s.data = onlineUsers
+        })
       })
 
       return () => {
         socket.disconnect()
       }
     }
-  }, [socket])
+  }, [socket, userEmail])
 
-  function onSuccess(text: String) {
-    socket.emit('chat', { text: text, email: 'garrison@hey.com' })
+  function onSuccess(text: string) {
+    socket.emit('chat', { text: text, email: userEmail, createdAt: new Date() })
   }
-
 
   return (
     <React.Fragment>
-      <ChatList data={chatData} />
-      <ChatInput onSuccess={(text: String) => onSuccess(text)} />
+      <ChatList />
+      <ChatInput onSuccess={(text: string) => onSuccess(text)} />
     </React.Fragment>
   )
 }

@@ -9,7 +9,6 @@ const ChatInput = (props: Props) => {
 
   function onSubmit(e: FormEvent) {
     e.preventDefault()
-    // console.log(props.onSuccess)
     props.onSuccess(value)
     setValue('')
   }

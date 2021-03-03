@@ -1,20 +1,17 @@
-import React, { useEffect } from 'react'
+import React from 'react'
+import { ChatStore } from '../store/ChatStore';
+import ChatItem from './ChatItem';
 
 
-interface Props {
-  data: any[]
-}
 
-const ChatList = (props: Props) => {
-  console.log(props.data);
+
+const ChatList = () => {
+  const data = ChatStore.useState(s => s.chatList ? s.chatList : []);
 
   return (
     <div className="mx-4 flex-1 flex flex-col-reverse align-bottom overflow-scroll">
-      {props.data.map((item, key) => (
-        <div className="text-sm mb-4 text-gray-800" key={key}>
-          <div><span className="font-bold">{item.email}</span></div>
-          <p className="leading-normal">{item.text}</p>
-        </div>
+      {data.map((item, key) => (
+        <ChatItem key={key} data={item} />
       ))}
     </div>
   )

@@ -8,8 +8,14 @@ interface LayoutPage extends NextPage {
   getLayout?: (component: JSX.Element) => JSX.Element;
 }
 
-interface SocketNextApiRequest extends NextApiResponse {
+interface SocketNextApiResponse extends NextApiResponse {
   socket: {
     server: Server;
   };
+}
+
+interface Chat {
+  email: string;
+  text: string;
+  createdAt: string;
 }
