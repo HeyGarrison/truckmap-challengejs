@@ -21,7 +21,7 @@ const Home: LayoutPage = () => {
 
       socket.on('chat', (data: Chat) => {
         ChatStore.update(s => {
-          s.chatList = s.chatList ? [data, ...s.chatList] : [data]
+          s.chatList.push(data);
         });
       })
 

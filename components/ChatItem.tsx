@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Chat } from '../next-env';
 
 interface Props {
@@ -9,6 +9,19 @@ const regexp = /((?:(http|https|Http|Https|rtsp|Rtsp):\/\/(?:(?:[a-zA-Z0-9\$\-\_
 
 const ChatItem = (props: Props) => {
   const { data } = props;
+
+  useEffect(() => {
+    const matches = data.text.match(regexp);
+    console.log(matches);
+    if (matches && matches.length > 0) {
+      fetch(`/api/generateMetaInfo?url=${matches[0]}`, {}).then(response => {
+        return response.json()
+      }).then(data => {
+        console.log(data);
+      })
+    }
+  }, [data.text])
+
   return (
     <div className="text-sm mb-4 text-gray-800">
       <div><span className="font-bold">{data.email}</span> <span className="text-xs">{new Date(data.createdAt).toLocaleTimeString()}</span></div>
