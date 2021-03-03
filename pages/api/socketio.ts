@@ -5,8 +5,6 @@ import { SocketNextApiResponse } from "../../next-env";
 let onlineUserList = {};
 const ioHandler = (req: NextApiRequest, res: SocketNextApiResponse) => {
   if (!res.socket.server.io) {
-    console.log("*First use, starting socket.io");
-
     const io = new Server(res.socket.server);
 
     io.on("connection", (socket: Socket) => {

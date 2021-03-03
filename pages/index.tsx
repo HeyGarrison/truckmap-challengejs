@@ -26,14 +26,12 @@ const Home: LayoutPage = () => {
       })
 
       socket.on('online-user', (onlineUsers) => {
-        console.log(onlineUsers);
         OnlineListStore.update(s => {
           s.data = onlineUsers
         });
       })
 
       socket.on('offline-user', (onlineUsers) => {
-        console.log(onlineUsers)
         OnlineListStore.update(s => {
           s.data = onlineUsers
         })

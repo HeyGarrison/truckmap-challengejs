@@ -2,15 +2,9 @@ import { Transition } from '@headlessui/react'
 import React, { useState } from 'react'
 import { OnlineListStore } from '../store/OnlineListStore';
 
-interface Props {
-
-}
-
-const OnlineUsers = (props: Props) => {
+const OnlineUsers = () => {
   const data = OnlineListStore.useState(s => s.data ? s.data : {})
   const isOpen = OnlineListStore.useState(s => s.isOpen ? s.isOpen : false)
-
-  console.log(isOpen)
 
   return (
     <Transition show={isOpen}>
